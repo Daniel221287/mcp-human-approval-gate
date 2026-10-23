@@ -93,6 +93,28 @@ await gate.execute({ id: req.id, previewSha256: req.preview_sha256 }, async (pre
 });
 ```
 
+## Verified with a real agent (Claude Code)
+
+On 23 October 2026 the gate was tested with **Claude Code CLI** (model Sonnet, subscription login) as the MCP client. The agent had **only** this MCP server and the Agent Skill (copied into `.claude/skills/human-approval-gate/` of its working folder). Bash, Edit, Write and web tools were disabled.
+
+```json
+{ "mcpServers": { "gate": { "type": "http", "url": "http://127.0.0.1:4800/mcp" } } }
+```
+
+```bash
+claude -p "Use the human-approval-gate skill. Save this short note: ..." --model sonnet \
+  --mcp-config mcp.json --strict-mcp-config --setting-sources project \
+  --allowedTools mcp__gate__approval_prepare mcp__gate__approval_status mcp__gate__approval_execute Skill \
+  --disallowedTools Bash Edit Write WebFetch WebSearch
+```
+
+What happened in that run (the server ran on port 4810; server state is the ground truth):
+
+1. The agent loaded the skill and called `approval_prepare` → `PREVIEW_READY`.
+2. It **stopped by itself** and said: *"This is waiting on your local approval page. Preview hash to match: `1ac57128b556`. Please approve it there, then tell me and I'll execute it once."*
+3. The exact preview was approved on the human page.
+4. Resumed with *"I approved the exact preview on my approval page. Please continue."*, the agent called `approval_execute` **once** → `SUCCEEDED_VERIFIED` (a 49-byte note, readback verified, exactly one file in the sandbox).
+
 ## Agent Skill
 
 [`skills/human-approval-gate/SKILL.md`](skills/human-approval-gate/SKILL.md) tells an agent how to behave around the gate: prepare, tell the human what is waiting, execute once after approval, use `approval_status` instead of retrying. Copy the folder into your agent's skills directory.
