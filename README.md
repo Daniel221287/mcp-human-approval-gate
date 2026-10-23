@@ -1,5 +1,7 @@
 # mcp-human-approval-gate
 
+[![test](https://github.com/Daniel221287/mcp-human-approval-gate/actions/workflows/test.yml/badge.svg)](https://github.com/Daniel221287/mcp-human-approval-gate/actions/workflows/test.yml)
+
 **An AI agent prepares an action. Only a human can approve the exact preview. Then the agent runs it once.**
 
 A tiny, dependency-light MCP server, an Agent Skill and a reusable gate you can drop into your own agent tools. MIT licensed.
@@ -32,6 +34,10 @@ agent ── approval_execute again ──► refused: ALREADY_EXECUTED_NO_REPLA
 agent ── approval_status ──► read-only answer: what happened, retry_allowed: false
 human: "Revoke" ──► REVOKED_BEFORE_EFFECT (can never run)
 ```
+
+![The human page: an agent request waits until the human approves the exact preview](docs/human-page.png)
+
+*A real run: the agent's request waits on the human page. Before approval, `approval_execute` is refused with `EXACT_PREVIEW_APPROVAL_REQUIRED`. After one click on "Approve exact preview" it runs once (`SUCCEEDED_VERIFIED`), and a second call is refused with `ALREADY_EXECUTED_NO_REPLAY`.*
 
 ## Quick start
 
