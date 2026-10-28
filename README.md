@@ -138,6 +138,8 @@ npm test
 
 Built during the Amazon **Build, Ship, Shape** hackathon (October 2026) as the open-source, reusable core of the human-approval pattern behind my hackathon entry. Written from scratch for this repository.
 
+**Related project video:** [Watch GnyPcior SafeDesk v4 (Amazon hackathon demo)](https://www.youtube.com/watch?v=izSZTK0me5o) to see this broader human-approval idea in a full agent application. SafeDesk is a separate project; the video is not a walkthrough of this standalone gate.
+
 ## License
 
 [MIT](LICENSE)
